@@ -1,0 +1,44 @@
+{
+  "transitions": {
+    "open_to_in_progress": {
+      "name": "Start Progress",
+      "fromStatus": "Open",
+      "toStatus": "In Progress",
+      "transitionId": "21"
+    },
+    "in_progress_to_review": {
+      "name": "Submit for Review",
+      "fromStatus": "In Progress",
+      "toStatus": "In Review",
+      "transitionId": "31"
+    },
+    "review_to_done": {
+      "name": "Done",
+      "fromStatus": "In Review",
+      "toStatus": "Done",
+      "transitionId": "41"
+    },
+    "any_to_blocked": {
+      "name": "Block",
+      "fromStatus": "*",
+      "toStatus": "Blocked",
+      "transitionId": "51"
+    },
+    "blocked_to_open": {
+      "name": "Unblock",
+      "fromStatus": "Blocked",
+      "toStatus": "Open",
+      "transitionId": "61"
+    },
+    "any_to_closed": {
+      "name": "Close",
+      "fromStatus": "*",
+      "toStatus": "Closed",
+      "transitionId": "71"
+    }
+  },
+  "_meta": {
+    "description": "Jira workflow transition ID mapping table. Update transitionIds to match your Jira project workflow.",
+    "lastUpdated": "2026-02-12"
+  }
+}

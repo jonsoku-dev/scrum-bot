@@ -1,0 +1,24 @@
+{
+  "name": "scrum-bot",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:bot": "pnpm --filter @scrum-bot/bot dev",
+    "dev:web": "pnpm --filter @scrum-bot/web dev",
+    "build": "pnpm -r build",
+    "build:bot": "pnpm --filter @scrum-bot/bot build",
+    "build:web": "pnpm --filter @scrum-bot/web build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}

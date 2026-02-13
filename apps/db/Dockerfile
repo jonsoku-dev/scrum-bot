@@ -1,0 +1,7 @@
+FROM pgvector/pgvector:pg17
+
+ENV POSTGRES_DB=scrumbot
+ENV POSTGRES_USER=scrum
+ENV POSTGRES_PASSWORD=scrum
+
+EXPOSE 5432

@@ -7,7 +7,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { Response } from 'express';
+import { randomUUID } from 'crypto';
+import type { Request, Response } from 'express';
 import { AppException } from '../exceptions/app.exception.js';
 
 @Catch()
@@ -21,6 +22,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+    const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
 
     let status: number;
@@ -47,14 +49,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     const stack = exception instanceof Error ? exception.stack : undefined;
-    this.logger.error(`HTTP ${status}: ${message}`, stack);
+    const traceId =
+      request.headers['x-request-id']?.toString() ?? randomUUID();
+
+    this.logger.error(`HTTP ${status}: ${message} (traceId=${traceId})`, stack);
 
     response.status(status).json({
       success: false,
       error: {
-        code: status,
+        code: errorCode ?? `HTTP_${status}`,
+        status,
+        traceId,
         message: this.isProd && status >= 500 ? 'Internal server error' : message,
-        ...(errorCode ? { errorCode } : {}),
         ...(this.isProd ? {} : { details }),
       },
     });

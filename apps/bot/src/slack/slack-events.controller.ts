@@ -8,6 +8,7 @@ import { DraftService } from '../drafts/draft.service.js';
 import { SlackNotificationService } from './slack-notification.service.js';
 import { ChannelPolicyService } from '../shared/channel-policy.service.js';
 import { SLACK_QUEUE } from '../shared/queue/queue.module.js';
+import { MetricsService } from '../shared/metrics.service.js';
 import type { SlackJobData } from '../shared/queue/slack.processor.js';
 
 interface SlackMessagePayload {
@@ -29,6 +30,7 @@ export class SlackEventsController {
     private readonly draftService: DraftService,
     private readonly slackNotification: SlackNotificationService,
     private readonly channelPolicy: ChannelPolicyService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   @Message(/.*/)
@@ -66,7 +68,9 @@ export class SlackEventsController {
           removeOnFail: 500,
         },
       );
+      this.metricsService.recordSlackIngestSuccess();
     } catch (queueError) {
+      this.metricsService.recordSlackIngestFailure();
       this.logger.error(
         `Failed to enqueue Slack ingest for ${msg.channel}/${msg.ts}: ${queueError instanceof Error ? queueError.message : String(queueError)}`,
       );

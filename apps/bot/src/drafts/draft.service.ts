@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 import { DRIZZLE, type DrizzleDB } from '../shared/database/drizzle.provider.js';
 import { drafts, type Draft } from '../shared/database/schema.js';
 import { AuditLogService } from '../shared/audit-log.service.js';
-import { DraftNotFoundException } from '../shared/exceptions/draft-not-found.exception.js';
+import { AppException } from '../shared/exceptions/app.exception.js';
 
 @Injectable()
 export class DraftService {
@@ -109,7 +109,7 @@ export class DraftService {
 
     const result = await this.findById(id);
     if (!result) {
-      throw new DraftNotFoundException(id);
+      throw new AppException(`Draft ${id} not found after update`, 404, 'DRAFT_NOT_FOUND');
     }
 
     await this.auditLogService.log({
@@ -136,7 +136,7 @@ export class DraftService {
 
     const result = await this.findById(id);
     if (!result) {
-      throw new DraftNotFoundException(id);
+      throw new AppException(`Draft ${id} not found after approve`, 404, 'DRAFT_NOT_FOUND');
     }
 
     await this.auditLogService.log({
@@ -161,7 +161,7 @@ export class DraftService {
 
     const result = await this.findById(id);
     if (!result) {
-      throw new DraftNotFoundException(id);
+      throw new AppException(`Draft ${id} not found after reject`, 404, 'DRAFT_NOT_FOUND');
     }
 
     await this.auditLogService.log({

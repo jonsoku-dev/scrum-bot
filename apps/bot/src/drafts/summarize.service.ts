@@ -8,6 +8,7 @@ import { createSpan, endSpan } from '../shared/tracing.js';
 import { PiiMaskingService } from '../shared/pii-masking.service.js';
 import { EvalService } from '../shared/eval.service.js';
 import { AppException } from '../shared/exceptions/app.exception.js';
+import { MetricsService } from '../shared/metrics.service.js';
 
 export interface SummarizeResult {
   summary: string;
@@ -25,12 +26,14 @@ export class SummarizeService {
     private readonly graphBuilder: GraphBuilderService,
     private readonly piiMasking: PiiMaskingService,
     private readonly evalService: EvalService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   async summarizeChannel(
     channelId: string,
     messageCount = 50,
   ): Promise<SummarizeResult> {
+    const startedAt = Date.now();
     const messages = await this.db
       .select()
       .from(slackEvents)
@@ -39,12 +42,14 @@ export class SummarizeService {
       .limit(messageCount);
 
     if (messages.length === 0) {
-      return {
+      const noMessageResult = {
         summary: 'No messages found in this channel to summarize.',
         channelId,
         messageCount: 0,
         actions: [],
       };
+      this.metricsService.recordSummarizeDuration(Date.now() - startedAt);
+      return noMessageResult;
     }
 
     const combinedText = messages
@@ -121,12 +126,15 @@ export class SummarizeService {
       `Generated summary for channel ${channelId} from ${messages.length} messages (eval: ${evalResult.overallScore}/100)`,
     );
 
-    return {
+    const response = {
       summary: summaryText,
       channelId,
       messageCount: messages.length,
       actions: result.actions ?? [],
     };
+
+    this.metricsService.recordSummarizeDuration(Date.now() - startedAt);
+    return response;
   }
 
   async processMeetingMinutes(

@@ -10,6 +10,7 @@ import { JiraWebhookController } from './jira-webhook.controller.js';
 import { MeetingsController } from './meetings.controller.js';
 import { SettingsController } from './settings.controller.js';
 import { EvaluationsController } from './evaluations.controller.js';
+import { MetricsController } from './metrics.controller.js';
 import { DraftsModule } from '../drafts/drafts.module.js';
 import { JiraModule } from '../jira/jira.module.js';
 import { SlackFeatureModule } from '../slack/slack-feature.module.js';
@@ -28,6 +29,7 @@ import { SlackFeatureModule } from '../slack/slack-feature.module.js';
     MeetingsController,
     SettingsController,
     EvaluationsController,
+    MetricsController,
   ],
 })
 export class ApiModule {}

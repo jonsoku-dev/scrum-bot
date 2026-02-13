@@ -49,6 +49,10 @@ describe('SummarizeService', () => {
     }),
   };
 
+  const mockMetricsService = {
+    recordSummarizeDuration: jest.fn(),
+  };
+
   const fakeMessage = {
     userId: 'U100',
     text: 'We decided to use PostgreSQL',
@@ -97,6 +101,7 @@ describe('SummarizeService', () => {
       mockGraphBuilder as any,
       mockPiiMasking as any,
       mockEvalService as any,
+      mockMetricsService as any,
     );
   });
 

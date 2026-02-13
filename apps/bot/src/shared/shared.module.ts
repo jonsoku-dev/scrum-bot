@@ -12,11 +12,12 @@ import { ChannelPolicyService } from './channel-policy.service.js';
 import { RetentionService } from './retention.service.js';
 import { TemporalDecayService } from './temporal-decay.service.js';
 import { OpenAiHttpService } from './openai-http.service.js';
+import { MetricsService } from './metrics.service.js';
 
 @Global()
 @Module({
   imports: [DatabaseModule, ConfigModule],
-  providers: [CostTrackingService, ContextService, AuditLogService, PiiMaskingService, AuthGuard, RolesGuard, EvalService, ChannelPolicyService, RetentionService, TemporalDecayService, OpenAiHttpService],
-  exports: [DatabaseModule, CostTrackingService, ContextService, AuditLogService, PiiMaskingService, AuthGuard, RolesGuard, EvalService, ChannelPolicyService, RetentionService, TemporalDecayService, OpenAiHttpService],
+  providers: [CostTrackingService, ContextService, AuditLogService, PiiMaskingService, AuthGuard, RolesGuard, EvalService, ChannelPolicyService, RetentionService, TemporalDecayService, OpenAiHttpService, MetricsService],
+  exports: [DatabaseModule, CostTrackingService, ContextService, AuditLogService, PiiMaskingService, AuthGuard, RolesGuard, EvalService, ChannelPolicyService, RetentionService, TemporalDecayService, OpenAiHttpService, MetricsService],
 })
 export class SharedModule {}
